@@ -2,6 +2,22 @@ const db = require("./postDb.js");
 const express = require("express");
 
 const router = express.Router();
+//post a post
+
+router.post("/", (req, res) => {
+    // do your magic!
+    db.insert(req.body)
+
+    .then(user => {
+        res.status(201).json(user);
+    })
+
+    .catch(err => {
+        console.log(err);
+
+        res.status(500).json({ message: "Error adding user." });
+    });
+});
 
 router.get("/", (req, res) => {
     // do your magic!

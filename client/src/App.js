@@ -6,7 +6,8 @@ function App() {
   const [posts, setPosts] = useState([]);
   const [users, setUsers] = useState([]);
   const [values, setValues] = useState({
-    text: ""
+    text: "",
+    user_id: 10
   });
   const [userValues, setUserValues] = useState({
     name: ""

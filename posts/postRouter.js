@@ -20,7 +20,7 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/:id", validatePostId(req, res) => {
+router.get("/:id", validatePostId, (req, res) => {
     // do your magic!
     const id = req.params.id;
 

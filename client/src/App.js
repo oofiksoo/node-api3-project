@@ -4,15 +4,14 @@ import "./App.css";
 
 function App() {
   const [posts, setPosts] = useState([]);
-  const [comments, setComments] = useState([]);
+  const [users, setUsers]
   const [values, setValues] = useState({
-    title: "",
-    contents: ""
+    text: ""
   });
 
   useEffect(() => {
     const getPosts = () => {
-      axios.get("http://ctfjmg01:4000/api/users").then(res => {
+      axios.get("http://ctfjmg01:4000/api/posts").then(res => {
         setPosts(res.data);
         //axios.get(`http://ctfjmg01:4000/api/posts/${id}/comments`).then(res => {
         //  setComments(res.data);
@@ -23,8 +22,8 @@ function App() {
   }, []);
   const addPost = () => {
     console.log(values);
-    axios.post("http://ctfjmg01:4000/api/users", values).then(res => {
-      axios.get("http://ctfjmg01:4000/api/users").then(res => {
+    axios.post("http://ctfjmg01:4000/api/posts", values).then(res => {
+      axios.get("http://ctfjmg01:4000/api/posts").then(res => {
         setPosts(res.data);
       });
     });
@@ -47,20 +46,12 @@ function App() {
     <div className="App">
       <h1>Add Post:</h1>
       <div className="addPost">
-        <p> Title: </p>
+        <p> Texte: </p>
         <input
           type="text"
-          id="title"
+          id="text"
           name="title"
-          value={values.title}
-          onChange={onChange}
-        ></input>
-        <p> Contents: </p>
-        <input
-          type="text"
-          id="contents"
-          name="contents"
-          value={values.contents}
+          value={values.text}
           onChange={onChange}
         ></input>
         <button onClick={() => addPost()}> Add </button>

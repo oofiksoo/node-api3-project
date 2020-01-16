@@ -76,7 +76,7 @@ router.put("/:id", validatePostId, (req, res) => {
 
     const data = req.body;
 
-    if (!data.title || !data.contents) {
+    if (!data.text || !data.user_id) {
         res.status(400).json({
             errorMessage: "Please provide title and contents for the post."
         });

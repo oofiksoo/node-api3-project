@@ -9,7 +9,7 @@ function App() {
     text: ""
   });
   const [userValues, setUserValues] = useState({
-    text: ""
+    name: ""
   });
   useEffect(() => {
     const getUsers = () => {
@@ -30,7 +30,7 @@ function App() {
   const deleteUser = id => {
     axios.delete(`http://ctfjmg01:4000/api/users/${id}`).then(res => {
       axios.get("http://ctfjmg01:4000/api/users").then(res => {
-        setPosts(res.data);
+        setUsers(res.data);
       });
     });
   };
@@ -74,27 +74,6 @@ function App() {
   };
   return (
     <div className="App">
-      <h1>Add Post:</h1>
-      <div className="addPost">
-        <p> Text: </p>
-        <input
-          type="text"
-          id="text"
-          name="text"
-          value={values.text}
-          onChange={onChange}
-        ></input>
-        <button onClick={() => addPost()}> Add </button>
-      </div>
-      <h1> Current Posts: </h1>
-      <div className="postBox">
-        {posts.map(post => (
-          <div className="postCard" key={post.id}>
-            <p> {post.text} </p>
-            <button onClick={() => deletePost(post.id)}>Delete</button>
-          </div>
-        ))}
-      </div>
       <h1>Add User:</h1>
       <div className="addPost">
         <p> Name: </p>
@@ -111,8 +90,31 @@ function App() {
       <div className="postBox">
         {users.map(user => (
           <div className="postCard" key={user.id}>
+            <p>{user.id}</p>
             <p> {user.name} </p>
             <button onClick={() => deleteUser(user.id)}>Delete</button>
+          </div>
+        ))}
+      </div>
+      <h1>Add Post:</h1>
+      <div className="addPost">
+        <p> Text: </p>
+        <input
+          type="text"
+          id="text"
+          name="text"
+          value={values.text}
+          onChange={onChange}
+        ></input>
+        <button onClick={() => addPost()}> Add </button>
+      </div>
+      <h1> Current Posts: </h1>
+      <div className="postBox">
+        {posts.map(post => (
+          <div className="postCard" key={post.id}>
+            <p>{post.id}</p>
+            <p> {post.text} </p>
+            <button onClick={() => deletePost(post.id)}>Delete</button>
           </div>
         ))}
       </div>

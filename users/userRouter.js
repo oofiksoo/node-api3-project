@@ -4,28 +4,18 @@ const express = require("express");
 
 const router = express.Router();
 
-router.post("/", validateUser, (req, res) => {
+router.post("/", (req, res) => {
     // do your magic!
-    db.insert("/api/users", (req, res) => {
-        const dbData = req.body;
+    db.insert(req.body)
 
-        if (dbData.name) {
-            db.insert(dbData)
+    .then(user => {
+        res.status(201).json(user);
+    })
 
-            .then(user => {
-                res.json(user);
-            })
+    .catch(err => {
+        console.log(err);
 
-            .catch(err => {
-                res.json({
-                    error: "error posting user"
-                });
-            });
-        } else {
-            res.status(400).json({
-                errorMessage: "Please provide name for the user."
-            });
-        }
+        res.status(500).json({ message: "Error adding user." });
     });
 });
 

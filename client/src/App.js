@@ -90,8 +90,8 @@ function App() {
       <div className="postBox">
         {users.map(user => (
           <div className="postCard" key={user.id}>
-            <p>{user.id}</p>
-            <p> {user.name} </p>
+            <p>ID: {user.id}</p>
+            <p>NAME: {user.name} </p>
             <button onClick={() => deleteUser(user.id)}>Delete</button>
           </div>
         ))}
@@ -112,8 +112,9 @@ function App() {
       <div className="postBox">
         {posts.map(post => (
           <div className="postCard" key={post.id}>
-            <p>{post.id}</p>
-            <p> {post.text} </p>
+            <p>ID: {post.id}</p>
+            <p>TEXT: {post.text} </p>
+            <p>Created by USER_ID: {post.user_id}</p>
             <button onClick={() => deletePost(post.id)}>Delete</button>
           </div>
         ))}

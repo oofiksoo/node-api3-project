@@ -11,9 +11,19 @@ server.get("/", (req, res) => {
 });
 
 //custom middleware
-server.use("/api/posts", PostRouter);
-server.use("/api/users", UserRouter);
+server.use("/api/posts", logger, PostRouter);
+server.use("/api/users", logger, UserRouter);
 
-function logger(req, res, next) {}
+function logger(req, res, next) {
+    const timestamp = new Date(Date.now());
+
+    console.log(
+        `\n${req.method} method made to ${
+      req.originalUrl
+    } at ${timestamp.toLocaleTimeString("en-US")}`
+    );
+
+    next();
+}
 
 module.exports = server;

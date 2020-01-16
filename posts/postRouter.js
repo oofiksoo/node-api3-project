@@ -1,10 +1,11 @@
+const db = require("./postDb.js");
 const express = require("express");
 
 const router = express.Router();
 
 router.get("/", (req, res) => {
     // do your magic!
-    db.find()
+    db.get()
 
     .then(posts => {
         res.status(200).json(posts);
@@ -23,7 +24,7 @@ router.get("/:id", (req, res) => {
     // do your magic!
     const id = req.params.id;
 
-    db.findById(id)
+    db.getById(id)
 
     .then(post => {
         if (post.length !== 0) {
@@ -106,6 +107,25 @@ router.put("/:id", (req, res) => {
 
 function validatePostId(req, res, next) {
     // do your magic!
+    const id = req.params.id;
+
+    db.getById(id)
+
+    .then(post => {
+        if (!post) {
+            res.status(400).json({ message: "Invalid post id." });
+        } else {
+            req.post = post;
+
+            next();
+        }
+    })
+
+    .catch(err => {
+        console.log(err);
+
+        res.status(500).json({ message: "Error retrieving post id." });
+    });
 }
 
 module.exports = router;

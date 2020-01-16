@@ -1,15 +1,15 @@
-const db = require("./data/dbConfig.js");
+const db = require("./userDb");
 
 const express = require("express");
 
 const router = express.Router();
 
-router.post("/", (req, res) => {
+router.post("/", validateUser, (req, res) => {
     // do your magic!
-    db.post("/api/users", (req, res) => {
+    db.insert("/api/users", (req, res) => {
         const dbData = req.body;
 
-        if (dbData.name && dbData.bio) {
+        if (dbData.name) {
             db.insert(dbData)
 
             .then(user => {
@@ -35,7 +35,7 @@ router.post("/:id/posts", (req, res) => {
 
 router.get("/", (req, res) => {
     // do your magic!
-    db.find()
+    db.get()
         .then(user => {
             if (user) {
                 res.status(201).json(user);
@@ -55,7 +55,7 @@ router.get("/:id", (req, res) => {
     // do your magic!
     const id = req.params.id;
 
-    db.findById(id)
+    db.getById(id)
 
     .then(users => {
         if (users) {
@@ -131,15 +131,53 @@ router.put("/:id", (req, res) => {
 //custom middleware
 
 function validateUserId(req, res, next) {
-    // do your magic!
+    // do your magic
+
+    const id = req.params.id;
+
+    db.getById(id)
+
+    .then(user => {
+        if (!user) {
+            res.status(400).json({ message: "Invalid user id." });
+        } else {
+            req.user = user;
+
+            next();
+        }
+    })
+
+    .catch(err => {
+        console.log(err);
+
+        res.status(500).json({ message: "Error retrieving user id." });
+    });
 }
 
 function validateUser(req, res, next) {
     // do your magic!
+    const body = req.body;
+
+    if (Object.keys(body).length === 0) {
+        res.status(400).json({ message: "Missing user data." });
+    } else if (!body.name) {
+        res.status(400).json({ message: "Missing required name field." });
+    } else {
+        next();
+    }
 }
 
 function validatePost(req, res, next) {
     // do your magic!
+    const body = req.body;
+
+    if (Object.keys(body).length === 0) {
+        res.status(400).json({ message: "Missing user data." });
+    } else if (!body.text) {
+        res.status(400).json({ message: "Missing required text field." });
+    } else {
+        next();
+    }
 }
 
 module.exports = router;

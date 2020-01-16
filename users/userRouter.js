@@ -23,14 +23,31 @@ router.post("/", validateUser, (req, res) => {
             });
         } else {
             res.status(400).json({
-                errorMessage: "Please provide name and bio for the user."
+                errorMessage: "Please provide name for the user."
             });
         }
     });
 });
 
-router.post("/:id/posts", (req, res) => {
+router.post("/:id/posts", validatePost, validateUserId, (req, res) => {
     // do your magic!
+    const newPost = {
+        ...req.body,
+
+        user_id: req.user.id
+    };
+
+    Posts.insert(newPost)
+
+    .then(post => {
+        res.status(201).json(post);
+    })
+
+    .catch(err => {
+        console.log(err);
+
+        res.status(500).json({ message: "Error adding post." });
+    });
 });
 
 router.get("/", (req, res) => {
@@ -51,7 +68,7 @@ router.get("/", (req, res) => {
         });
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", validateUserId, (req, res) => {
     // do your magic!
     const id = req.params.id;
 
@@ -74,11 +91,24 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.get("/:id/posts", (req, res) => {
+router.get("/:id/posts", validateUserId, (req, res) => {
     // do your magic!
+    db.getUserPosts(req.user.id)
+
+    .then(posts => {
+        res.status(200).json(posts);
+    })
+
+    .catch(err => {
+        console.log(err);
+
+        res.status(500).json({
+            message: "Error retrieving posts."
+        });
+    });
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", validateUserId, (req, res) => {
     // do your magic!
     const id = req.params.id;
 
